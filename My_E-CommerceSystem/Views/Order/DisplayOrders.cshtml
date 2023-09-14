@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Order>
+@{
+}
+@{
+    ViewData["Title"] = "DisplayOrders";
+}
+<div style="width:100%" class="mt-2">
+    <a href="/Home/Index" class="btn btn-primary my-2">Back</a>
+
+    <h5>My Orders</h5>
+    @if (Model != null && Model.Count() > 0)
+    {
+        <table class="table table-striped">
+            <tr>
+                <th>Order Date</th>
+                <th>Order Status</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Details</th>
+                <th>Remove</th>
+
+            </tr>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td style="vertical-align: middle;">@order.OrderDate.ToString("dd-MM-yyyy")</td>
+                    <td style="vertical-align: middle;">@order?.OrderStatus?.StatusName</td>
+                    <td style="vertical-align: middle;">@order?.NumberOfProducts</td>
+                    <td style="vertical-align: middle;">@order?.TotalPrice</td>
+                    <td style="vertical-align: middle;">
+                        <a asp-controller="OrderDetail" asp-action="GetDetails" asp-route-orderId="@order?.Id" class="btn btn-outline-info">More</a>
+                    </td>
+                    <td style="vertical-align: middle;" >
+                        <button class="btn btn-outline-danger delete-button" data-id="@order?.Id">Delete</button>
+                    </td>
+                </tr>
+            }
+        </table>
+
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            No orders. Hurry! Go to Explore, Discover, and Buy with Ease and continue shopping.
+        </div>
+    }
+</div>
+<script>
+    // Get references to all delete buttons
+    const deleteButtons = document.querySelectorAll('.delete-button');
+
+    // Attach click event listeners to the delete buttons
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            // Get the data-id attribute value from the button
+            const itemId = button.getAttribute('data-id');
+
+            // Display a confirmation dialog
+            const confirmed = window.confirm("Are you sure you want to delete this item?");
+
+            // Check if the user confirmed
+            if (confirmed) {
+                // Redirect to the delete action with the item's ID as a query parameter
+                window.location.href = `/Order/Delete?id=${itemId}`;
+            }
+        });
+    });
+</script>

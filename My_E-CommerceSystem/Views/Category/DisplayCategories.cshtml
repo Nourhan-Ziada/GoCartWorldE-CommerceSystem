@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Category>
+@{
+    ViewData["Title"] = "Display Categories";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Category List</h1>
+
+    @if (Model.Any())
+    {
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Category Name</th>
+@*                    <th>Action</th>
+*@                </tr>
+            </thead>
+            <tbody>
+                @foreach (var category in Model)
+                {
+                    <tr>
+                        <td>@category.Id</td>
+                        <td>@category.CategoryName</td>
+                        @*<td>
+                            <a href="@Url.Action("Update", "Category", new { id = category.Id })" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="@Url.Action("Delete", "Category", new { id = category.Id })" class="btn btn-danger btn-sm">Delete</a>
+                        </td>*@
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            No categories found. Please add some categories first.
+        </div>
+    }
+</div>

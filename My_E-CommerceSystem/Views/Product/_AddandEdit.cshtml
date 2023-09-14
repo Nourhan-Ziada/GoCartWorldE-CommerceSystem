@@ -1,0 +1,64 @@
+﻿
+@model Product
+
+@{
+    ViewData["Title"] = "_AddandEdit";
+    SelectList Categories = new SelectList(ViewBag.Categories, "Id", "CategoryName");
+}
+
+<div class="container">
+    <h2>@ViewBag.Link Product</h2>
+    <form method="post" asp-action="@ViewBag.Link" asp-controller="Product" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="Name">Product Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="imageInput">Image</label>
+            <input type="file" id="imageInput" name="ImageFile" onchange="handleFileSelect(event)" class="form-control" />
+            <span asp-validation-for="Image" class="text-danger"></span>
+        </div>
+        @if (ViewBag.Link == "Update")
+        {
+            <div class="form-group">
+                <input asp-for="Image" id="imageFileName" name="Image" value="@Model.Image" readonly="true" />
+            </div>
+        }
+        @if (ViewBag.Link == "Create")
+        {
+            <div class="form-group">
+                <!-- Hidden input to store the image file name -->
+                <input hidden asp-for="Image" id="imageFileName" name="Image" />
+            </div>
+        }
+        <div class="form-group">
+            <label asp-for="CategoryId">Category Name</label>
+            <select asp-for="CategoryId" asp-items="Categories" class="form-control">
+                <option value="">Select a category...</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="QuantityInventory">Quantity Inventory</label>
+            <input asp-for="QuantityInventory" class="form-control" />
+            <span asp-validation-for="QuantityInventory" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PriceUnit">Price Unit</label>
+            <input asp-for="PriceUnit" class="form-control" />
+            <span asp-validation-for="PriceUnit" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">@ViewBag.Link</button>
+    </form>
+</div>
+
+<script>
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        const fileName = file.name;
+
+        // Set the file name to the hidden input field
+        document.getElementById('imageFileName').value = fileName;
+    }
+</script>

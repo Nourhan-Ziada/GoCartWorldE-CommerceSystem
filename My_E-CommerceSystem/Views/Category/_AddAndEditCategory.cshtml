@@ -1,0 +1,19 @@
+﻿
+@model Category
+
+@{
+    ViewData["Title"] = "_AddandEditCategory";
+}
+
+<div class="container">
+    <h2>@ViewBag.Link Product</h2>
+    <form method="post" asp-action="@ViewBag.Link" asp-controller="Category" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="CategoryName">Category Name</label>
+            <input asp-for="CategoryName" class="form-control" />
+            <span asp-validation-for="CategoryName" class="text-danger"></span>
+            <button type="submit" class="btn btn-primary">@ViewBag.Link</button>
+        </div>
+
+     </form>
+ </div>

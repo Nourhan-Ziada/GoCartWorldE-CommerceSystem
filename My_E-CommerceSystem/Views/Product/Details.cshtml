@@ -1,0 +1,49 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "Details";
+}
+<div class="card mx-3 mb-4" style="width: 11rem;">
+
+    <img style="width:100%;height:180px" src="@Url.Content("~/Images/" + Model?.Category?.CategoryName + "/" + Model?.Image)" class="card-img-top" alt="...">
+
+    <div class="card-body d-flex flex-column">
+        <h5 class="card-title">@Model?.Name</h5>
+        <p class="card-text flex-grow-1">
+            <b>Category: </b>@Model?.Category?.CategoryName <br />
+            <b>Quantity: </b>@Model?.QuantityInventory <br />
+            <b>Price: </b>@Model?.PriceUnit$ <br />
+        </p>
+        <button type="button" onclick="add(@Model?.Id)" class="btn btn-primary align-self-center">Add to cart</button>
+    </div>
+</div>
+@* <a href="@Url.Action("index", "Product")" class="btn btn-primary">Back to List</a>
+*@
+<a href="@Url.Action("index", "Home")" class="btn btn-primary">Back to List</a>
+
+@section Scripts{
+    <script>
+        async function add(productId) {
+            var usernameEl = document.getElementById("username");
+            if (usernameEl == null) {
+                window.location.href = "/Identity/Account/Login";
+                //var username=usernameEl.innerText;
+                //  if(username.length<1){
+                //      window.location.href="/Identity/Account/Login";
+                //  }
+            }
+            try {
+                var response = await fetch(`/ShoppingCart/AddItem?productId=${productId}`);
+                if (response.status == 200) {
+                    var result = await response.json();
+                    var cartCountEl = document.getElementById("cartCount");
+                    cartCountEl.innerHTML = result;
+                    window.location.href = "#cartCount";
+                    // fetch Api from product controller update
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+    </script>
+}

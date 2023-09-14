@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewData["Title"] = "DisplayCart";
+}
+
+<div style="width:90%;margin:auto" class="mt-2">
+    @if (Model != null && Model.CartItems != null && Model.CartItems.Count > 0)
+    {
+        <h5>My Cart</h5>
+
+        <table class="table table-striped">
+            <tr>
+                <th>Product</th>
+                <th>Image</th>
+                <th>Category</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+
+                <th>Total Price</th>
+                <th>Action</th>
+            </tr>
+            @foreach (var item in Model.CartItems)
+            {
+                <tr>
+                    <td>@item?.Product?.Name</td>
+                    <td>
+                        <img src="@Url.Content("~/Images/" + item?.Product?.Category?.CategoryName + "/" + item?.Product?.Image)" asp-append-version="true" style="width:80px;height:100px" alt="@item?.Product?.Name" />
+                    </td>
+                    <td>@item?.Product?.Category?.CategoryName</td>
+                    <td>@item?.UnitPrice $</td>
+                    <td>@item?.Quantity</td>
+                    <td>@(item?.UnitPrice * item?.Quantity) $</td>
+                    <td>
+                        <a asp-controller="ShoppingCart" asp-action="AddItem" asp-route-productId="@item?.ProductId" asp-route-redirectAction="1" class="btn btn-info">+</a>
+                        <a asp-controller="ShoppingCart" asp-action="RemoveItem" asp-route-productId="@item?.ProductId" class="btn btn-info">-</a>
+                    </td>
+                </tr>
+            }
+        </table>
+
+        <div class="my-2">
+            <h5>Total: </h5>
+            @(Model.TotalPrice)
+        </div>
+
+        <div class="my-2">
+            <a asp-controller="ShoppingCart" asp-action="Checkout" class="btn btn-primary">Checkout</a>
+        </div>
+
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            Your cart is empty. Please add some items to continue shopping.
+        </div>
+    }
+</div>

@@ -1,0 +1,77 @@
+﻿@model List<Product>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<table class="table">
+    <a href="@Url.Action("Create", "Product")" class="btn btn-primary">
+        <i class="bi bi-plus"></i> Add
+    </a>
+    <a href="@Url.Action("Index", "Category")" class="btn btn-primary">
+        <i class="bi bi-list"></i> All Categories
+    </a>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Category</th>
+            <th>Quantity Inventory</th>
+            <th>Price Unit</th>
+            <th>Details</th>
+            <th>Edit</th>
+            <th>Delete</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product?.Name</td>
+                <td>
+                        <img src="@Url.Content("~/Images/" + product?.Category?.CategoryName + "/" + product?.Image)" asp-append-version="true" style="width:80px;height:100px" alt="@product?.Name" />
+
+               </td>
+               <td>
+                    @product?.Category?.CategoryName
+               </td>
+
+                <td>@product?.QuantityInventory</td>
+                <td>@product?.PriceUnit</td>
+
+                <td>
+                <a href="@Url.Action("Details", "Product", new { id = product?.Id })" class="btn btn-outline-info">Details</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("Update", "Product", new { id = product?.Id })" class="btn btn-outline-secondary">Edit</a>
+
+                </td>
+                <td>
+                    <button class="btn btn-outline-danger delete-button" data-id="@product?.Id">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+<script>
+    // Get references to all delete buttons
+    const deleteButtons = document.querySelectorAll('.delete-button');
+
+    // Attach click event listeners to the delete buttons
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            // Get the data-id attribute value from the button
+            const itemId = button.getAttribute('data-id');
+
+            // Display a confirmation dialog
+            const confirmed = window.confirm("Are you sure you want to delete this item?");
+
+            // Check if the user confirmed
+            if (confirmed) {
+                // Redirect to the delete action with the item's ID as a query parameter
+                window.location.href = `/Product/Delete?id=${itemId}`;
+            }
+        });
+    });
+</script>
